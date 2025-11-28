@@ -13,6 +13,22 @@ This project uses a Multi-Layer Perceptron (MLP) regressor to predict HTC based 
 - **Web Interface**: A modern Flask-based web UI for easy predictions.
 - **Interactive Inference**: Command-line script for quick checks.
 
+![Web Interface](images/web_interface.png)
+
+*Figure 1: The Heat Transfer Coefficient Predictor Web Interface.*
+
+## Model Performance
+
+The model shows excellent agreement with experimental data.
+
+![Actual vs Predicted](images/actual_vs_predicted.png)
+
+*Figure 2: Comparison of predicted vs actual Heat Transfer Coefficient values.*
+
+![Residuals](images/residuals.png)
+
+*Figure 3: Distribution of prediction errors (residuals).*
+
 ## Installation
 
 1. Clone the repository.
