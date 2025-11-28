@@ -2,6 +2,8 @@
 
 A machine learning project to predict the convective Heat Transfer Coefficient (HTC) of nanofluids in a circular tube.
 
+**[🔴 LIVE DEMO: Click here to use the Predictor](https://hhemantpatel.github.io/HTC-predictor/)**
+
 ## Overview
 
 This project uses a Multi-Layer Perceptron (MLP) regressor to predict HTC based on fluid properties and flow conditions. It is trained on experimental data from nanofluid studies.
