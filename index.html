@@ -5,40 +5,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heat Transfer Coefficient Predictor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --secondary: #06b6d4;
-            --bg: #f3f4f6;
-            --card-bg: #ffffff;
-            --text: #111827;
-            --text-light: #6b7280;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
             --success: #10b981;
+            --bg-start: #0f172a;
+            --bg-end: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #e0e7ff 0%, #cffafe 100%);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
             color: var(--text);
-            margin: 0;
-            padding: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            animation: gradient-shift 15s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradient-shift {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(5%, -5%) rotate(1deg);
+            }
+
+            66% {
+                transform: translate(-5%, 5%) rotate(-1deg);
+            }
         }
 
         .container {
-            background-color: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
             width: 100%;
-            max-width: 550px;
+            max-width: 600px;
             position: relative;
-            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .container::before {
@@ -46,164 +102,91 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
+            right: 0;
             height: 6px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 2rem 2rem 0 0;
+            background-size: 200% 100%;
+            animation: gradient-flow 3s ease infinite;
+        }
+
+        @keyframes gradient-flow {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
+            font-size: 2.25rem;
+            font-weight: 800;
             text-align: center;
-            margin-bottom: 2rem;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            margin-bottom: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: 1.25rem;
         }
 
         .form-group {
-            margin-bottom: 1rem;
             position: relative;
+            animation: fadeIn 0.5s ease-out backwards;
         }
 
-        .form-group.full-width {
-            grid-column: span 2;
+        .form-group:nth-child(1) {
+            animation-delay: 0.1s;
         }
 
-        label {
-            display: flex;
-            align-items: center;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--text);
+        .form-group:nth-child(2) {
+            animation-delay: 0.15s;
         }
 
-        .info-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background-color: #e5e7eb;
-            color: var(--text-light);
-            font-size: 10px;
-            margin-left: 8px;
-            cursor: help;
-            transition: all 0.2s;
+        .form-group:nth-child(3) {
+            animation-delay: 0.2s;
         }
 
-        .info-icon:hover {
-            background-color: var(--primary);
-            color: white;
+        .form-group:nth-child(4) {
+            animation-delay: 0.25s;
         }
 
-        /* Tooltip */
-        .tooltip {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #1f2937;
-            color: white;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            width: 200px;
-            text-align: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s;
-            z-index: 10;
-            pointer-events: none;
-            margin-bottom: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        .form-group:nth-child(5) {
+            animation-delay: 0.3s;
         }
 
-        .tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #1f2937 transparent transparent transparent;
+        .form-group:nth-child(6) {
+            animation-delay: 0.35s;
         }
 
-        .info-icon:hover+.tooltip {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(-5px);
+        .form-group:nth-child(7) {
+            animation-delay: 0.4s;
         }
 
-        input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.75rem;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-            box-sizing: border-box;
-            background-color: #f9fafb;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-        }
-
-        button {
-            width: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-hover));
-            color: white;
-            padding: 1rem;
-            border: none;
-            border-radius: 0.75rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.2s;
-            margin-top: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
-        }
-
-        button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        #result {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-            border: 1px solid #a7f3d0;
-            display: none;
-            text-align: center;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(10px);
@@ -215,27 +198,220 @@
             }
         }
 
-        .result-label {
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
             font-size: 0.875rem;
             font-weight: 600;
+            margin-bottom: 0.625rem;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e0e7ff, #ddd6fe);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 8px;
+            cursor: help;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+        }
+
+        .info-icon:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            width: 220px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+
+        .info-icon:hover+.tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 0.875rem;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fafafa;
+            font-weight: 500;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1),
+                0 2px 8px rgba(99, 102, 241, 0.15);
+            transform: translateY(-1px);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.125rem;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 2rem;
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+            letter-spacing: 0.02em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(99, 102, 241, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #result {
+            margin-top: 2rem;
+            padding: 2rem;
+            border-radius: 1.25rem;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid #6ee7b7;
+            display: none;
+            text-align: center;
+            animation: resultSlideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        @keyframes resultSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .result-label {
+            font-size: 0.875rem;
+            font-weight: 700;
             color: #047857;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
         }
 
         .result-value {
-            font-size: 2.5rem;
-            font-weight: 800;
+            font-size: 3rem;
+            font-weight: 900;
             color: #059669;
             line-height: 1;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
         }
 
         .unit {
-            font-size: 1rem;
+            font-size: 1.125rem;
             color: #047857;
-            font-weight: 500;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 1.875rem;
+            }
         }
     </style>
 </head>
@@ -294,7 +470,7 @@
                     <label>
                         Density (kg/m³)
                         <span class="info-icon">i</span>
-                        <span class="tooltip">Fluid mass per volume. denser fluids carry more momentum (higher
+                        <span class="tooltip">Fluid mass per volume. Denser fluids carry more momentum (higher
                             Reynolds).</span>
                     </label>
                     <input type="number" step="1" name="rho" required placeholder="e.g. 1255">
@@ -318,7 +494,6 @@
         </div>
     </div>
 
-    <!-- Load Model Data -->
     <script src="model.js"></script>
 
     <script>
@@ -328,7 +503,6 @@
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
 
-            // Convert strings to floats
             const inputs = [
                 parseFloat(data.vol_frac),
                 parseFloat(data.temp),
@@ -344,38 +518,39 @@
             btn.innerText = 'Calculating...';
             btn.disabled = true;
 
-            try {
-                // Run prediction locally using the function from model.js
-                const prediction = predict(inputs);
+            setTimeout(() => {
+                try {
+                    const prediction = predict(inputs);
 
-                // Animate the number
-                const targetValue = prediction;
-                const displayElem = document.getElementById('predictionValue');
-                document.getElementById('result').style.display = 'block';
+                    const targetValue = prediction;
+                    const displayElem = document.getElementById('predictionValue');
+                    document.getElementById('result').style.display = 'block';
 
-                let startTimestamp = null;
-                const duration = 1000;
+                    let startTimestamp = null;
+                    const duration = 1500;
 
-                const step = (timestamp) => {
-                    if (!startTimestamp) startTimestamp = timestamp;
-                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                    const currentVal = progress * targetValue;
-                    displayElem.innerText = currentVal.toFixed(2);
+                    const step = (timestamp) => {
+                        if (!startTimestamp) startTimestamp = timestamp;
+                        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                        const currentVal = easeOutQuart * targetValue;
+                        displayElem.innerText = currentVal.toFixed(2);
 
-                    if (progress < 1) {
-                        window.requestAnimationFrame(step);
-                    }
-                };
+                        if (progress < 1) {
+                            window.requestAnimationFrame(step);
+                        }
+                    };
 
-                window.requestAnimationFrame(step);
+                    window.requestAnimationFrame(step);
 
-            } catch (error) {
-                alert('Error calculating prediction: ' + error);
-                console.error(error);
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
+                } catch (error) {
+                    alert('Error calculating prediction: ' + error);
+                    console.error(error);
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }, 300);
         });
     </script>
 </body>
