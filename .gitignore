@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+venv/
+.env
+.DS_Store
+models/scaler.pkl
+models/htc_model.pkl
+models/feature_names.pkl
+# We keep the model files for now as they are small and needed for the demo, 
+# but usually we might exclude them. Let's include them for this small project 
+# so the user can clone and run immediately.
+# Wait, I listed them above to exclude? No, I'll comment them out to INCLUDE them.
+# models/scaler.pkl
+# models/htc_model.pkl
+# models/feature_names.pkl
